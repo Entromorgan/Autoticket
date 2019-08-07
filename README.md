@@ -39,6 +39,8 @@ pip install selenium
 
 使用前请将待抢票者的姓名、手机、地址设为默认。
 
+配置完成后执行python Autoticket.py即可。
+
 ## Advance usage
 最后成功测试运行时间：2019-08-07。
 
