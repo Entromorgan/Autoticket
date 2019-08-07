@@ -13,7 +13,8 @@ pip install selenium
 
 ## Basic usage
 在config.json中输入相应配置信息，具体说明如下：
-'''
+
+'''json
 {
     "sess": [ # 场次优先级列表，如本例中共有三个场次，根据下表，则优先选择1，再选择2，最后选择3；也可以仅设置1个。
         1,
