@@ -183,7 +183,7 @@ class Concert(object):
 
     def finish(self):
         if self.status == 6: # 说明抢票成功
-            print("###经过%d轮奋斗，共耗时%f秒，抢票成功！请及时付款###"%(self.num-1,round(self.time_end-self.time_start,3)))
+            print("###经过%d轮奋斗，共耗时%f秒，抢票成功！请及时付款###"%(self.num,round(self.time_end-self.time_start,3)))
         else:
             self.driver.quit()
 
