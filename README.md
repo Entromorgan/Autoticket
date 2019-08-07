@@ -15,7 +15,9 @@ pip install selenium
 在config.json中输入相应配置信息，具体说明如下：
 
 '''json
+
 {
+    
     "sess": [ # 场次优先级列表，如本例中共有三个场次，根据下表，则优先选择1，再选择2，最后选择3；也可以仅设置1个。
         1,
         2,
@@ -28,6 +30,7 @@ pip install selenium
     "real_name": 2, # 实名者序号，如本例中共有两位实名者，根据序号，选择第二位实名者。
     "damai_url": "https://www.damai.cn/", # 大麦网官网网址
     "target_url": "https://detail.damai.cn/item.htm?id=599834886497" # 目标购票网址
+    
 }
 '''
 
