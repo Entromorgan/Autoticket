@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 class Concert(object):
-    def __init__(self, session, price, real_name, damai_url, target_url):
+    def __init__(self, session, price, real_name, nick_name, damai_url, target_url):
         self.session = session # 场次序号优先级
         self.price = price # 票价序号优先级
         self.real_name = real_name # 实名者序号
@@ -18,10 +18,10 @@ class Concert(object):
         self.time_start = 0 # 开始时间
         self.time_end = 0 # 结束时间
         self.num = 0 # 尝试次数
+        self.nick_name = nick_name # 用户昵称
         self.damai_url = damai_url # 大麦网官网网址 
         self.target_url = target_url # 目标购票网址
     
-
     def isClassPresent(self, item, name, ret=False):
         try:
             result = item.find_element_by_class_name(name)
@@ -32,7 +32,6 @@ class Concert(object):
         except:
             return False
             
-
     def get_cookie(self):
         self.driver.get(self.damai_url)
         print("###请点击登录###")
@@ -44,7 +43,6 @@ class Concert(object):
         dump(self.driver.get_cookies(), open("cookies.pkl", "wb")) 
         print("###Cookie保存成功###")
     
-
     def set_cookie(self):
         try:
             cookies = load(open("cookies.pkl", "rb")) # 载入cookie
@@ -63,7 +61,6 @@ class Concert(object):
         except Exception as e:
             print(e)
             
-
     def login(self):
         print('###开始登录###')
         if not exists('cookies.pkl'):# 如果不存在cookie.pkl,就获取一下
@@ -71,15 +68,21 @@ class Concert(object):
         self.driver.get(self.target_url)
         self.set_cookie()
      
-
     def enter_concert(self):
         print('###打开浏览器，进入大麦网###')
         self.driver = webdriver.Firefox() # 默认火狐浏览器
         self.driver.maximize_window()
         self.login()
         self.driver.refresh()
+        try:
+            locator = (By.XPATH, "/html/body/div[1]/div/div[3]/div[1]/a[2]/div")
+            element = WebDriverWait(self.driver, 3, 0.3).until(EC.text_to_be_present_in_element(locator,self.nick_name))
+            self.status = 1
+            print("###登录成功###")
+        except:
+            self.status=0
+            print("###登录失败###") 
     
-
     def choose_ticket(self):
         self.time_start = time() 
         print("###开始进行日期及票价选择###")
@@ -155,35 +158,40 @@ class Concert(object):
                 print('###抢票失败，请手动提交缺货登记###')  
                 break  
                 
-            # break           
+            break           
     
-
     def check_order(self):
         if self.status in [3,4,5]:
             print('###开始确认订单###')
             print('###选择购票人信息###')   
             try:
                 tb = WebDriverWait(self.driver, 3, 0.3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/div[2]/div/div[2]/div[2]/div[1]')))
+                lb = tb.find_elements_by_tag_name('label')[self.real_name-1] # 选择第self.real_name个实名者
+                lb.find_element_by_tag_name('input').click()
             except Exception as e:
                 print("###实名信息选择框没有显示###")
-                print(e)
-            lb=tb.find_elements_by_tag_name('label')[self.real_name-1] # 选择第self.real_name个实名者
-            lb.find_element_by_tag_name('input').click()
             print('###不选择订单优惠###')
             print('###请在付款完成后下载大麦APP进入订单详情页申请开具###')
-            self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[9]/button').click() # 同意以上协议并提交订单
+            # self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[9]/button').click() # 同意以上协议并提交订单
             try:
-                element = WebDriverWait(self.driver, 5).until(EC.title_contains('支付'))
+                buttons = self.driver.find_elements_by_tag_name('button') # 找出所有该页面的button
+                for button in buttons:
+                    if button.text == '同意以上协议并提交订单':
+                        button.click()
+                        break
+            except Exception as e:
+                print('###没有找到提交订单按钮###')
+            try:
+                element = WebDriverWait(self.driver, 5, 0.5).until(EC.title_contains('支付'))
                 self.status = 6
                 print('###成功提交订单,请手动支付###')
                 self.time_end = time()
             except:
                 print('###提交订单失败,请查看问题###')
-               
-
+                        
     def finish(self):
         if self.status == 6: # 说明抢票成功
-            print("###经过%d轮奋斗，共耗时%f秒，抢票成功！请及时付款###"%(self.num,round(self.time_end-self.time_start,3)))
+            print("###经过%d轮奋斗，共耗时%f秒，抢票成功！请确认订单信息###"%(self.num,round(self.time_end-self.time_start,3)))
         else:
             self.driver.quit()
 
@@ -192,8 +200,8 @@ if __name__ == '__main__':
     try:
         with open('./config.json', 'r', encoding='utf-8') as f:
             config = loads(f.read())
-            # params: 场次优先级，票价优先级，实名者序号, 官网网址， 目标网址
-        con = Concert(config['sess'], config['price'], config['real_name'], config['damai_url'], config['target_url'])
+            # params: 场次优先级，票价优先级，实名者序号, 用户昵称， 官网网址， 目标网址
+        con = Concert(config['sess'], config['price'], config['real_name'], config['nick_name'], config['damai_url'], config['target_url'])
         con.enter_concert()
         con.choose_ticket()
         con.check_order()
