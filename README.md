@@ -26,6 +26,7 @@ pip install selenium
         3
     ],
     "real_name": 2, # 实名者序号，如本例中共有两位实名者，根据序号，选择第二位实名者。
+    "nick_name": "<Your nick_name>", # 用户的昵称，用于验证登录是否成功
     "damai_url": "https://www.damai.cn/", # 大麦网官网网址
     "target_url": "https://detail.damai.cn/item.htm?id=599834886497" # 目标购票网址
     
@@ -60,8 +61,6 @@ pip install selenium
 
 1. '/html/body/div[2]/div[2]/div/div[2]/div[2]/div[1]' # 实名者/观演人栏
 
-2. '/html/body/div[2]/div[2]/div/div[9]/button' # 同意以上协议并提交订单按钮
-
 本代码中用到的class name如下：
 
 1. perform__order__select # 本类包括场次选项和票档选项
@@ -75,6 +74,34 @@ pip install selenium
 5. notticket # 票档选项的左上角标，若存在，则为缺货登记
 
 6. buybtn # 目标购票页面中的抢购按钮，其text内容包含多种情况，如即将开抢、立即预订、立即购买、选座购买、提交缺货登记
+
+本代码中用到的tag如下：
+
+1. label # 实名者（标签+勾选框）
+
+2. input # 实名者（勾选框）
+
+3. button # 同意以上协议并提交订单
+
+## Change log
+
+v0.1: 
+
+基本功能实现：
+
+  1）用户登录cookie记录
+  
+  2）场次、票档自动勾选，优先级设定，自动跳过无票/缺货登记
+  
+  3）实名者/观演人设定
+  
+v0.2：
+
+鲁棒性提升：
+
+  1）添加用户昵称，验证登录成功
+  
+  2）修改提交订单按钮的索引方式，增强适配性
 
 ## Ref
 修改自以下两个Repo:
