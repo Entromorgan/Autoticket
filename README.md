@@ -1,6 +1,10 @@
 # Autoticket
 大麦网自动抢票工具
 
+注：目前仅支持目标网址的格式为detail.damai.cn，格式为piao.damai.cn的暂不支持。
+
+zhu
+
 ## Preliminary
 Python 3.6+
 
