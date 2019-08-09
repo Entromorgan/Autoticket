@@ -1,8 +1,6 @@
 # Autoticket
 大麦网自动抢票工具
 
-注：目前仅支持目标网址的格式为detail.damai.cn，格式为piao.damai.cn的暂不支持。
-
 ## Preliminary
 Python 3.6+
 
@@ -29,6 +27,7 @@ pip install selenium
     ],
     "real_name": 2, # 实名者序号，如本例中共有两位实名者，根据序号，选择第二位实名者。
     "nick_name": "<Your nick_name>", # 用户的昵称，用于验证登录是否成功
+    "ticket_num": 1, # 购买票数，暂未支持
     "damai_url": "https://www.damai.cn/", # 大麦网官网网址
     "target_url": "https://detail.damai.cn/item.htm?id=599834886497" # 目标购票网址
     
@@ -45,7 +44,7 @@ pip install selenium
 配置完成后执行python Autoticket.py即可。
 
 ## Advance usage
-最后成功测试运行时间：2019-08-07。
+最后成功测试运行时间：2019-08-09。
 
 此方法太过于依赖大麦网页面源码的元素的title、Xpath、class name，若相应的绝对路径寻找不到则代码无法运行。
 
@@ -105,9 +104,13 @@ v0.2：
   
   2）修改提交订单按钮的索引方式，增强适配性
   
+v0.3:
+
+增强适配性，添加piao.damai.cn类别网页支持
+  
 ## TO-DO list
 
-1. 适配piao.damai.cn
+1. 适配piao.damai.cn（已完成）
 
 2. 增加日期选择功能
 
