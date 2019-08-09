@@ -43,7 +43,7 @@ pip install selenium
 
 配置完成后执行python Autoticket.py即可。
 
-## Advance usage
+## Advance usage （后续改到Wiki中）
 最后成功测试运行时间：2019-08-09。
 
 此方法太过于依赖大麦网页面源码的元素的title、Xpath、class name，若相应的绝对路径寻找不到则代码无法运行。
@@ -117,6 +117,8 @@ v0.3:
 3. 实名售票适配
 
 4. 指定购买票数
+
+5. 增强场次、票档定位稳定性，避免因刷新过快带来的影响
 
 ## Ref
 修改自以下两个Repo:
