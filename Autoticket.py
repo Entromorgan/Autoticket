@@ -273,6 +273,15 @@ class Concert(object):
     def check_order_2(self):
         if self.status in [3,4,5]:
             print('###开始确认订单###')
+            print('###选择购票人信息###')   
+            try:
+                tb = WebDriverWait(self.driver, 3, 0.3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[3]/div[3]/div[3]/div[2]/div[2]/div/div/div/h2/a')))
+                tb.click()
+                sleep(0.3)
+                lb_list = self.driver.find_element_by_xpath('/html/body/div[3]/div[3]/div[12]/div/div[2]/div/div[2]/div/table/tbody')
+                lb_list.find_elements_by_tag_name('input')[self.real_name-1].click() # 选择第self.real_name个实名者
+            except Exception as e:
+                print("###实名信息选择框没有显示###")
             print('###不选择订单优惠###')
             print('###请在付款完成后下载大麦APP进入订单详情页申请开具###')
             self.driver.find_element_by_id('orderConfirmSubmit').click() # 同意以上协议并提交订单
