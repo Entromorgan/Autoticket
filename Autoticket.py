@@ -31,6 +31,7 @@ class Concert(object):
         else:
             self.type = 0
             raise Exception("Unsupported Target Url Format:", self.target_url)
+            self.driver.quit()
     
     
     def isClassPresent(self, item, name, ret=False):
@@ -99,7 +100,8 @@ class Concert(object):
             print("###登录成功###")
         except:
             self.status=0
-            print("###登录失败###") 
+            raise Exception("登录失败,请删除cookie后重试") 
+            self.driver.quit()
     
     
     def choose_ticket_1(self): # for type 1, i.e., detail.damai.cn           
@@ -115,17 +117,17 @@ class Concert(object):
             '''
             self.num += 1
             selects = self.driver.find_elements_by_class_name('perform__order__select')
-            print('可选区域数量为：{}'.format(len(selects)))
+            # print('可选区域数量为：{}'.format(len(selects)))
             for item in selects:
                 if item.find_element_by_class_name('select_left').text == '场次':
                     session = item
-                    print('\t场次定位成功')
+                    # print('\t场次定位成功')
                 elif item.find_element_by_class_name('select_left').text == '票档':
                     price = item
-                    print('\t票档定位成功')
+                    # print('\t票档定位成功')
 
             session_list = session.find_elements_by_class_name('select_right_list_item')
-            print('可选场次数量为：{}'.format(len(session_list)))
+            # print('可选场次数量为：{}'.format(len(session_list)))
             for i in self.session: # 根据优先级选择一个可行场次
                 j = session_list[i-1]
                 k = self.isClassPresent(j, 'presell', True)
@@ -140,7 +142,7 @@ class Concert(object):
                     break
 
             price_list = price.find_elements_by_class_name('select_right_list_item')
-            print('可选票档数量为：{}'.format(len(price_list)))
+            # print('可选票档数量为：{}'.format(len(price_list)))
             for i in self.price:
                 j = price_list[i-1]
                 k = self.isClassPresent(j, 'notticket')
@@ -153,7 +155,7 @@ class Concert(object):
             buybutton = self.driver.find_element_by_class_name('buybtn')
             buybutton_text = buybutton.text
             
-            if buybutton_text == "即将开抢":
+            if buybutton_text == "即将开抢" or buybutton_text == "即将开售":
                 self.status = 2
                 self.driver.get(self.target_url)
                 print('###抢票未开始，刷新等待开始###')
@@ -199,7 +201,7 @@ class Concert(object):
             sleep(0.7)
             price = self.driver.find_element_by_id('priceList')
             price_list = price.find_elements_by_tag_name('li')
-            print('可选票档数量为：{}'.format(len(price_list)))
+            # print('可选票档数量为：{}'.format(len(price_list)))
             for i in self.price:
                 j = price_list[i-1].get_attribute('class')
                 if j == 'itm': # 未选中
@@ -220,7 +222,7 @@ class Concert(object):
                 for i in range(self.ticket_num-1):
                     add.click()  
             '''
-            
+            # 添加立即预订按钮，修改逻辑
             try:
                 buybutton = self.driver.find_element_by_id('btnBuyNow')
                 buybutton.click()
