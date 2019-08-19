@@ -110,7 +110,7 @@ v0.3:
   
 ## TO-DO list
 
-1. 适配piao.damai.cn（已完成）
+1. 适配piao.damai.cn（不成熟）
 
 2. 增加日期选择功能
 
