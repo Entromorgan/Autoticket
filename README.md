@@ -95,7 +95,7 @@ v0.4:
 6. 适配手机APP端
 
 ## Ref
-修改自以下两个Repo:
+本代码修改自Ref 1，2两个Repo。
 
 1. Oliver0047: https://github.com/Oliver0047/Concert_Ticket
 
