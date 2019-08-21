@@ -30,7 +30,7 @@ class Concert(object):
             self.type = 2
         else:
             self.type = 0
-            raise Exception("Unsupported Target Url Format:", self.target_url)
+            raise Exception("***Error:Unsupported Target Url Format:{}***".format(self.target_url))
             self.driver.quit()
     
     
@@ -100,7 +100,7 @@ class Concert(object):
             print("###登录成功###")
         except:
             self.status=0
-            raise Exception("登录失败,请删除cookie后重试") 
+            raise Exception("***错误：登录失败,请删除cookie后重试***") 
             self.driver.quit()
     
     
@@ -162,10 +162,14 @@ class Concert(object):
                 continue
 
             elif buybutton_text == "立即预订":
+                for i in range(self.ticket_num-1): # 设置增加票数
+                    self.driver.find_element_by_xpath('/html/body/div[2]/div/div[1]/div[1]/div/div[2]/div[3]/div[8]/div[2]/div/div/a[2]').click()
                 buybutton.click()
                 self.status = 3
                     
             elif buybutton_text == "立即购买":
+                for i in range(self.ticket_num-1): # 设置增加票数
+                    self.driver.find_element_by_xpath('/html/body/div[2]/div/div[1]/div[1]/div/div[2]/div[3]/div[8]/div[2]/div/div/a[2]').click()
                 buybutton.click()
                 self.status = 4                    
         
@@ -212,33 +216,33 @@ class Concert(object):
                 elif j == 'itm itm-oos': # 无法选中
                     continue 
                     
-            '''# 需要先判断是否存在按钮，才能确定是否会出现添加票
+            # 需要先判断是否存在按钮，才能确定是否会出现添加票
             sleep(0.5)
-                    
+            try:
+                buybutton = self.driver.find_element_by_id('btnBuyNow') # 要改成立即预订按钮的id
+                self.status = 3
+            except:
+                try:
+                    buybutton = self.driver.find_element_by_id('btnBuyNow')
+                    self.status = 4
+                except:
+                    print('###无法立即购买，尝试自行选座###')
+                    try:
+                        buybutton = self.driver.find_element_by_id('btnXuanzuo')
+                        self.status = 5
+                        print("###请自行选择位置和票价###") # 此处或可改成input，等待用户选完后反馈，继续抢票流程
+                        break
+                    except:
+                        print('---无法自行选座，尝试刷新---')
+                        self.status = 2
+                        self.driver.refresh()
             if self.ticket_num > 1:# 自动添加购票数
                 add = self.driver.find_element_by_class_name('btn-add')
                 while add.is_displayed() != True: # 等待显示
                     continue
                 for i in range(self.ticket_num-1):
-                    add.click()  
-            '''
-            # 添加立即预订按钮，修改逻辑
-            try:
-                buybutton = self.driver.find_element_by_id('btnBuyNow')
-                buybutton.click()
-                self.status = 4
-            except:
-                print('###无法立即购买，尝试自行选座###')
-                try:
-                    buybutton = self.driver.find_element_by_id('btnXuanzuo')
-                    buybutton.click()
-                    self.status = 5
-                    print("###请自行选择位置和票价###") # 此处或可改成input，等待用户选完后反馈，继续抢票流程
-                    break
-                except:
-                    print('###无法自行选座，尝试刷新###')
-                    self.status = 2
-                    self.driver.refresh()
+                    add.click()
+            buybutton.click()
             # 目前没有找到缺货没有按钮的情况
             
     
@@ -247,14 +251,16 @@ class Concert(object):
             print('###开始确认订单###')
             print('###选择购票人信息###')   
             try:
-                tb = WebDriverWait(self.driver, 3, 0.3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/div[2]/div/div[2]/div[2]/div[1]')))
+                tb = WebDriverWait(self.driver, 10, 0.3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/div[2]/div/div[2]/div[2]/div[1]')))
                 lb = tb.find_elements_by_tag_name('label')[self.real_name-1] # 选择第self.real_name个实名者
                 lb.find_element_by_tag_name('input').click()
-            except Exception as e:
-                print("###实名信息选择框没有显示###")
-            print('###不选择订单优惠###')
-            print('###请在付款完成后下载大麦APP进入订单详情页申请开具###')
-            # self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[9]/button').click() # 同意以上协议并提交订单
+            except:
+                raise Exception("***错误：实名信息选择框没有显示***")
+            # print('###不选择订单优惠###')
+            # print('###请在付款完成后下载大麦APP进入订单详情页申请开具###')
+            sleep(0.5)
+            self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[9]/button').click() # 同意以上协议并提交订单
+            '''
             try:
                 buttons = self.driver.find_elements_by_tag_name('button') # 找出所有该页面的button
                 for button in buttons:
@@ -262,14 +268,15 @@ class Concert(object):
                         button.click()
                         break
             except Exception as e:
-                print('###没有找到提交订单按钮###')
+                raise Exception('***错误：没有找到提交订单按钮***')
+           '''
             try:
-                element = WebDriverWait(self.driver, 5, 0.5).until(EC.title_contains('支付'))
+                element = WebDriverWait(self.driver, 10, 0.3).until(EC.title_contains('支付宝'))
                 self.status = 6
                 print('###成功提交订单,请手动支付###')
                 self.time_end = time()
             except:
-                print('###提交订单失败,请查看问题###')
+                print('---提交订单失败,请查看问题---')
                 
                 
     def check_order_2(self):
@@ -284,8 +291,8 @@ class Concert(object):
                 lb_list.find_elements_by_tag_name('input')[self.real_name-1].click() # 选择第self.real_name个实名者
             except Exception as e:
                 print("###实名信息选择框没有显示###")
-            print('###不选择订单优惠###')
-            print('###请在付款完成后下载大麦APP进入订单详情页申请开具###')
+            # print('###不选择订单优惠###')
+            # print('###请在付款完成后下载大麦APP进入订单详情页申请开具###')
             self.driver.find_element_by_id('orderConfirmSubmit').click() # 同意以上协议并提交订单
             element = WebDriverWait(self.driver, 10, 2).until(EC.title_contains('选择支付方式'))
             element.find_element_by_xpath('/html/body/div[5]/div/div/div/ul/li[2]/a').click() # 默认选择支付宝
