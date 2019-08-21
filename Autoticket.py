@@ -157,8 +157,8 @@ class Concert(object):
             
             if buybutton_text == "即将开抢" or buybutton_text == "即将开售":
                 self.status = 2
-                self.driver.get(self.target_url)
-                print('###抢票未开始，刷新等待开始###')
+                self.driver.refresh()
+                print('---尚未开售，刷新等待---')
                 continue
 
             elif buybutton_text == "立即预订":
@@ -233,7 +233,7 @@ class Concert(object):
                         print("###请自行选择位置和票价###") # 此处或可改成input，等待用户选完后反馈，继续抢票流程
                         break
                     except:
-                        print('---无法自行选座，尝试刷新---')
+                        print('---尚未开售，刷新等待---')
                         self.status = 2
                         self.driver.refresh()
             if self.ticket_num > 1:# 自动添加购票数
