@@ -27,7 +27,7 @@ pip install selenium
     ],
     "real_name": 2, # 实名者序号，如本例中共有两位实名者，根据序号，选择第二位实名者。
     "nick_name": "<Your nick_name>", # 用户的昵称，用于验证登录是否成功
-    "ticket_num": 1, # 购买票数，暂未支持
+    "ticket_num": 1, # 购买票数
     "damai_url": "https://www.damai.cn/", # 大麦网官网网址
     "target_url": "https://detail.damai.cn/item.htm?id=599834886497" # 目标购票网址
     
