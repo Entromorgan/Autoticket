@@ -1,6 +1,8 @@
 # Autoticket
 大麦网自动抢票工具
 
+讨论QQ群：680269358
+
 ## Preliminary
 Python 3.6+
 
