@@ -92,9 +92,13 @@ v0.4:
 
 5. 增强场次、票档定位稳定性，避免因刷新过快带来的影响
 
+6. 适配手机APP端
+
 ## Ref
 修改自以下两个Repo:
 
 1. Oliver0047: https://github.com/Oliver0047/Concert_Ticket
 
 2. MakiNaruto: https://github.com/MakiNaruto/Automatic_ticket_purchase
+
+3. JnuMxin: https://github.com/JnuMxin/damaiAuto
