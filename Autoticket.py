@@ -315,7 +315,7 @@ class Concert(object):
                 lb_list = self.driver.find_element_by_xpath(
                     '/html/body/div[3]/div[3]/div[12]/div/div[2]/div/div[2]/div/table/tbody')
                 lb_list.find_elements_by_tag_name('input')
-                for i in len(self.real_name):
+                for i in range(len(self.real_name)):
                     lb[self.real_name[i] - 1].find_element_by_tag_name('input').click()  # 选择第self.real_name个实名者
             except Exception as e:
                 print("###实名信息选择框没有显示###")
