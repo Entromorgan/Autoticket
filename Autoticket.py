@@ -117,9 +117,10 @@ class Concert(object):
             WebDriverWait(self.driver, 5, 0.5).until(EC.text_to_be_present_in_element(locator, self.nick_name))
             self.status = 1
             print("###登录成功###")
-        except:
+        except Exception as e:
+            print(e)
             self.status = 0
-            raise Exception("***错误：登录失败,请删除cookie后重试***")
+            raise Exception("***错误：登录失败,尝试删除cookie后重试***")
             self.driver.quit()
 
             
@@ -299,8 +300,9 @@ class Concert(object):
                 self.status = 6
                 print('###成功提交订单,请手动支付###')
                 self.time_end = time()
-            except:
+            except Exception as e:
                 print('---提交订单失败,请查看问题---')
+                print(e)
 
                 
     def check_order_2(self):
@@ -318,7 +320,8 @@ class Concert(object):
                 for i in range(len(self.real_name)):
                     lb[self.real_name[i] - 1].find_element_by_tag_name('input').click()  # 选择第self.real_name个实名者
             except Exception as e:
-                print("###实名信息选择框没有显示###")
+                print(e)
+                # print("###实名信息选择框没有显示###")
             # print('###不选择订单优惠###')
             # print('###请在付款完成后下载大麦APP进入订单详情页申请开具###')
             self.driver.find_element_by_id('orderConfirmSubmit').click()  # 同意以上协议并提交订单
