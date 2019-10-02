@@ -53,9 +53,9 @@ pip install selenium
 配置完成后执行python Autoticket.py即可。
 
 ## Advance usage
-最后成功测试运行时间：2019-08-21。
+最后成功测试运行时间：2019-10-02。
 
-此方法太过于依赖大麦网页面源码的元素的title、Xpath、class name等，若相应的绝对路径寻找不到则代码无法运行。
+此方法太过于依赖大麦网页面源码的元素的title、Xpath、class name、tag name等，若相应的绝对路径寻找不到则代码无法运行。
 
 建议自己先测试一遍，自行修改相应的绝对路径或用更好的定位方法替代。
 
