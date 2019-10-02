@@ -7,9 +7,13 @@
 Python 3.6+
 
 ## Set up
-Firefox Browser (测试版本：v68.0.1.7137)
+//Firefox Browser (测试版本：v68.0.1.7137)
 
-geckodriver.exe (测试版本：v0.24.0)
+//geckodriver.exe (测试版本：v0.24.0)
+
+Chrome（测试版本：v77.0.3865.90）
+
+Chrome driver（测试版本：v77.0.3865.10）
 
 pip install selenium
 
@@ -27,12 +31,15 @@ pip install selenium
         1,
         3
     ],
-    "real_name": 2, # 实名者序号，如本例中共有两位实名者，根据序号，选择第二位实名者。
+    "real_name": [# 实名者序号，如本例中共有两位实名者，根据序号，同时选择1，2位实名者。
+        1,
+        2
+    ],
     "nick_name": "<Your nick_name>", # 用户的昵称，用于验证登录是否成功
-    "ticket_num": 1, # 购买票数
+    "ticket_num": 2, # 购买票数
     "damai_url": "https://www.damai.cn/", # 大麦网官网网址
-    "target_url": "https://detail.damai.cn/item.htm?id=599834886497" # 目标购票网址
-    
+    "target_url": "https://detail.damai.cn/item.htm?id=599834886497", # 目标购票网址
+    "browser": 0 # 浏览器类别，0为Chrome（默认），1为Firefox
 }
 
 ![avatar](/picture/1.png)
@@ -81,10 +88,14 @@ v0.3:
 v0.4:
 
 鲁棒性提升，修改终端输出内容，添加指定购买票数功能（暂未支持勾选多实名者）
+
+v0.5:
+
+改默认浏览器为Chrome，默认取消图片加载，修复了部分bug，支持detail类别网站的票数增减、多实名者勾选，调整部分定位方式，修改错误输出
   
 ## To-do List
 
-### 预计本次国庆期间划掉1~5，并将firefox调整为chrome，适配ubuntu系统
+### 预计本次国庆期间划掉1~4，适配ubuntu系统
 
 1. 适配piao.damai.cn（不成熟）
 
@@ -92,17 +103,9 @@ v0.4:
 
 3. 实名售票适配
 
-4. 指定购买票数（部分完成）
+4. 完善异常捕获
 
-5. 鲁棒性、效率提升：
-
-    1） 增强元素定位稳定性，避免刷新过快程序崩溃（全面改用until方法）
-    
-    2） 取消图片元素加载，提高刷新效率
-    
-    3） 完善异常捕获
-
-6. 适配手机APP端（路漫漫~）
+5. 适配手机APP端（路漫漫~）
 
 ## Ref
 本代码修改自Ref 1，2两个Repo。
