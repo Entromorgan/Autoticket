@@ -6,12 +6,12 @@ from time import sleep, time
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 
 
 class Concert(object):
-    def __init__(self, session, price, real_name, nick_name, ticket_num, damai_url, target_url):
+    def __init__(self, session, price, real_name, nick_name, ticket_num, damai_url, target_url, browser):
         self.session = session  # 场次序号优先级
         self.price = price  # 票价序号优先级
         self.real_name = real_name  # 实名者序号
@@ -24,6 +24,7 @@ class Concert(object):
         self.nick_name = nick_name  # 用户昵称
         self.damai_url = damai_url  # 大麦网官网网址
         self.target_url = target_url  # 目标购票网址
+        self.browser = browser # 0代表Chrome，1代表Firefox，默认为Chrome
 
         if self.target_url.find("detail.damai.cn") != -1:
             self.type = 1
@@ -34,6 +35,7 @@ class Concert(object):
             raise Exception("***Error:Unsupported Target Url Format:{}***".format(self.target_url))
             self.driver.quit()
 
+            
     def isClassPresent(self, item, name, ret=False):
         try:
             result = item.find_element_by_class_name(name)
@@ -44,6 +46,7 @@ class Concert(object):
         except:
             return False
 
+        
     def get_cookie(self):
         self.driver.get(self.damai_url)
         print("###请点击登录###")
@@ -55,6 +58,7 @@ class Concert(object):
         dump(self.driver.get_cookies(), open("cookies.pkl", "wb"))
         print("###Cookie保存成功###")
 
+        
     def set_cookie(self):
         try:
             cookies = load(open("cookies.pkl", "rb"))  # 载入cookie
@@ -73,28 +77,44 @@ class Concert(object):
         except Exception as e:
             print(e)
 
+            
     def login(self):
         print('###开始登录###')
         if not exists('cookies.pkl'):  # 如果不存在cookie.pkl,就获取一下
+            if self.browser == 0: # 选择了Chrome浏览器
+                self.driver = webdriver.Chrome()
+            elif self.browser == 1: # 选择了Firefox浏览器
+                self.driver = webdriver.Firefox()
+            else:
+                raise Exception("***错误：未知的浏览器类别***")
             self.get_cookie()
+            self.driver.quit()
+        print('###打开浏览器，进入大麦网###')
+        if self.browser == 0: # 选择了Chrome浏览器，并成功加载cookie，设置不载入图片，提高刷新效率
+            options = webdriver.ChromeOptions()
+            prefs = {"profile.managed_default_content_settings.images":2}
+            options.add_experimental_option("prefs",prefs)
+            self.driver = webdriver.Chrome(options=options)
+        elif self.browser == 1: # 选择了火狐浏览器
+            options = webdriver.FirefoxProfile()
+            options.set_preference('permissions.default.image', 2)  
+            self.driver = webdriver.Firefox(options)
+        else: 
+            raise Exception("***错误：未知的浏览器类别***")
         self.driver.get(self.target_url)
         self.set_cookie()
-
-    def enter_concert(self):
-        print('###打开浏览器，进入大麦网###')
-        options = webdriver.FirefoxProfile()
-        options.set_preference('permissions.default.image', 2)  #设置不加载图片，提升刷新速度
-        self.driver = webdriver.Firefox(options)  # 默认火狐浏览器
         self.driver.maximize_window()
-        self.login()
         self.driver.refresh()
+        
+        
+    def enter_concert(self):
+        self.login()
         try:
             if self.type == 1:  # detail.damai.cn
                 locator = (By.XPATH, "/html/body/div[1]/div/div[3]/div[1]/a[2]/div")
             elif self.type == 2:  # piao.damai.cn
                 locator = (By.XPATH, "/html/body/div[1]/div/ul/li[2]/div/label/a[2]")
-            element = WebDriverWait(self.driver, 3, 0.3).until(
-                EC.text_to_be_present_in_element(locator, self.nick_name))
+            WebDriverWait(self.driver, 5, 0.5).until(EC.text_to_be_present_in_element(locator, self.nick_name))
             self.status = 1
             print("###登录成功###")
         except:
@@ -102,6 +122,7 @@ class Concert(object):
             raise Exception("***错误：登录失败,请删除cookie后重试***")
             self.driver.quit()
 
+            
     def choose_ticket_1(self):  # for type 1, i.e., detail.damai.cn
         self.time_start = time()
         print("###开始进行日期及票价选择###")
@@ -161,15 +182,15 @@ class Concert(object):
 
             elif buybutton_text == "立即预订":
                 for i in range(self.ticket_num - 1):  # 设置增加票数
-                    self.driver.find_element_by_xpath(
-                        '/html/body/div[2]/div/div[1]/div[1]/div/div[2]/div[3]/div[8]/div[2]/div/div/a[2]').click()
+                    addbtn = WebDriverWait(self.driver, 5, 0.5).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div[1]/div[1]/div/div[2]/div[5]/div[6]/div[2]/div/div/a[2]")))
+                    addbtn.click()
                 buybutton.click()
                 self.status = 3
 
             elif buybutton_text == "立即购买":
                 for i in range(self.ticket_num - 1):  # 设置增加票数
-                    self.driver.find_element_by_xpath(
-                        '/html/body/div[2]/div/div[1]/div[1]/div/div[2]/div[3]/div[8]/div[2]/div/div/a[2]').click()
+                    addbtn = WebDriverWait(self.driver, 5, 0.5).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div[1]/div[1]/div/div[2]/div[5]/div[6]/div[2]/div/div/a[2]")))
+                    addbtn.click()
                 buybutton.click()
                 self.status = 4
 
@@ -183,6 +204,7 @@ class Concert(object):
                 print('###抢票失败，请手动提交缺货登记###')
                 break
 
+                
     def choose_ticket_2(self):  # for type 2, i.e., piao.damai.cn
         self.time_start = time()
         print("###开始进行日期及票价选择###")
@@ -244,22 +266,25 @@ class Concert(object):
             buybutton.click()
             # 目前没有找到缺货没有按钮的情况
 
+            
     def check_order_1(self):
         if self.status in [3, 4, 5]:
             print('###开始确认订单###')
             print('###选择购票人信息###')
             try:
-                tb = WebDriverWait(self.driver, 10, 0.3).until(
-                    EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/div[2]/div/div[2]/div[2]/div[1]')))
-                lb = tb.find_elements_by_tag_name('label')[self.real_name - 1]  # 选择第self.real_name个实名者
-                lb.find_element_by_tag_name('input').click()
-            except:
-                raise Exception("***错误：实名信息选择框没有显示***")
+                list_xpath = "//*[@id=\"confirmOrder_1\"]/div[2]/div[2]/div[1]/div[%d]/label/span[1]/input"
+                for i in range(len(self.real_name)): # 选择第i个实名者
+                    WebDriverWait(self.driver, 5, 0.5).until(
+                        EC.presence_of_element_located((By.XPATH, list_xpath%(i+1)))).click()
+            except Exception as e:
+                print(e)
+                # raise Exception("***错误：实名信息选择框没有显示***")
             # print('###不选择订单优惠###')
             # print('###请在付款完成后下载大麦APP进入订单详情页申请开具###')
-            sleep(0.5)
-            self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[9]/button').click()  # 同意以上协议并提交订单
-            '''
+            submitbtn = WebDriverWait(self.driver, 5, 0.5).until(
+                    EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/div[2]/div/div[9]/button'))) # 同意以上协议并提交订单
+            submitbtn.click()  
+            '''# 以下的方法更通用，但是更慢
             try:
                 buttons = self.driver.find_elements_by_tag_name('button') # 找出所有该页面的button
                 for button in buttons:
@@ -270,13 +295,14 @@ class Concert(object):
                 raise Exception('***错误：没有找到提交订单按钮***')
            '''
             try:
-                element = WebDriverWait(self.driver, 10, 0.3).until(EC.title_contains('支付宝'))
+                WebDriverWait(self.driver, 5, 0.5).until(EC.title_contains('支付宝'))
                 self.status = 6
                 print('###成功提交订单,请手动支付###')
                 self.time_end = time()
             except:
                 print('---提交订单失败,请查看问题---')
 
+                
     def check_order_2(self):
         if self.status in [3, 4, 5]:
             print('###开始确认订单###')
@@ -288,7 +314,9 @@ class Concert(object):
                 sleep(0.3)
                 lb_list = self.driver.find_element_by_xpath(
                     '/html/body/div[3]/div[3]/div[12]/div/div[2]/div/div[2]/div/table/tbody')
-                lb_list.find_elements_by_tag_name('input')[self.real_name - 1].click()  # 选择第self.real_name个实名者
+                lb_list.find_elements_by_tag_name('input')
+                for i in len(self.real_name):
+                    lb[self.real_name[i] - 1].find_element_by_tag_name('input').click()  # 选择第self.real_name个实名者
             except Exception as e:
                 print("###实名信息选择框没有显示###")
             # print('###不选择订单优惠###')
@@ -320,9 +348,9 @@ if __name__ == '__main__':
     try:
         with open('./config.json', 'r', encoding='utf-8') as f:
             config = loads(f.read())
-            # params: 场次优先级，票价优先级，实名者序号, 用户昵称， 购买票数， 官网网址， 目标网址
+            # params: 场次优先级，票价优先级，实名者序号, 用户昵称， 购买票数， 官网网址， 目标网址， 浏览器
         con = Concert(config['sess'], config['price'], config['real_name'], config['nick_name'], config['ticket_num'],
-                      config['damai_url'], config['target_url'])
+                      config['damai_url'], config['target_url'], config['browser'])
         con.enter_concert()
         if con.type == 1:  # detail.damai.cn
             con.choose_ticket_1()
