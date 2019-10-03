@@ -7,15 +7,13 @@
 Python 3.6+
 
 ## Set up
-//Firefox Browser (测试版本：v68.0.1.7137)
+Option1：Firefox Browser (测试版本：v68.0.1.7137) + geckodriver (测试版本：v0.24.0)
 
-//geckodriver.exe (测试版本：v0.24.0)
-
-Chrome（测试版本：v77.0.3865.90）
-
-Chrome driver（测试版本：v77.0.3865.10）
+Option2：Chrome（测试版本：v77.0.3865.90） + Chrome driver（测试版本：v77.0.3865.10）
 
 pip install selenium
+
+注：支持Windows、Linux、MacOS，请移步Wiki更换浏览器驱动
 
 ## Basic usage
 在config.json中输入相应配置信息，具体说明如下：
@@ -46,11 +44,11 @@ pip install selenium
 
 ![avatar](/picture/2.png)
 
-若是首次登录，根据终端输出的提示，依次点击登录、扫码登录，代码将自动保存cookie文件（cookie.pkl）
+若是首次登录，根据终端输出的提示，依次点击登录、扫码登录，代码将自动保存cookie文件（cookie.pkl）。
 
-使用前请将待抢票者的姓名、手机、地址设为默认。
+使用前请将待抢票者的姓名、手机、地址设为默认，如存在多名实名者，请提前保存相关信息。
 
-配置完成后执行python Autoticket.py即可。
+配置完成后执行python Autoticket.py即可，由于有启动建议提前一段时间打开程序。
 
 ## Advance usage
 最后成功测试运行时间：2019-10-02。
@@ -95,9 +93,9 @@ v0.5:
   
 ## To-do List
 
-### 预计本次国庆期间划掉1~4，适配ubuntu系统
+### 预计本次国庆期间划掉1~4
 
-1. 适配piao.damai.cn（不成熟）
+1. 适配piao.damai.cn
 
 2. 增加日期选择功能
 
