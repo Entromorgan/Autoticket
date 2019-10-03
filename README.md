@@ -6,11 +6,11 @@
 ## Preliminary
 Python 3.6+
 
+Option1：Firefox (测试版本：v68.0.1.7137) + geckodriver (测试版本：v0.24.0)
+
+Option2：Chrome （测试版本：v77.0.3865.90） + Chrome driver （测试版本：v77.0.3865.10）
+
 ## Set up
-Option1：Firefox Browser (测试版本：v68.0.1.7137) + geckodriver (测试版本：v0.24.0)
-
-Option2：Chrome（测试版本：v77.0.3865.90） + Chrome driver（测试版本：v77.0.3865.10）
-
 pip install selenium
 
 注：支持Windows、Linux、MacOS，请移步Wiki更换浏览器驱动
@@ -60,7 +60,6 @@ pip install selenium
 具体修改方案请参见Wiki。
 
 ## Change log
-
 v0.1: 
 
 基本功能实现：
@@ -92,9 +91,7 @@ v0.5:
 改默认浏览器为Chrome，默认取消图片加载，修复了部分bug，支持detail类别网站的票数增减、多实名者勾选，调整部分定位方式，修改错误输出
   
 ## To-do List
-
 ### 预计本次国庆期间划掉1~4
-
 1. 适配piao.damai.cn
 
 2. 增加日期选择功能
