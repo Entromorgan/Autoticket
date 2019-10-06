@@ -6,7 +6,7 @@
 ## Preliminary
 Python 3.6+
 
-Option1：Firefox (测试版本：v68.0.1.7137) + geckodriver (测试版本：v0.24.0)
+Option1：Firefox（测试版本：v68.0.1.7137） + geckodriver（测试版本：v0.24.0）
 
 Option2：Chrome （测试版本：v77.0.3865.90） + Chrome driver （测试版本：v77.0.3865.10）
 
@@ -29,11 +29,12 @@ pip install selenium
         1,
         3
     ],
-    "real_name": [# 实名者序号，如本例中共有两位实名者，根据序号，同时选择1，2位实名者。
+    "date": 0, # 选择第几个日期，默认为0表示不选择
+    "real_name": [# 实名者序号，如本例中共有两位实名者，根据序号，同时选择1，2位实名者，留空表示无需实名购票。
         1,
         2
     ],
-    "nick_name": "<Your nick_name>", # 用户的昵称，用于验证登录是否成功
+    "nick_name": "your_nick_name", # 用户的昵称，用于验证登录是否成功
     "ticket_num": 2, # 购买票数
     "damai_url": "https://www.damai.cn/", # 大麦网官网网址
     "target_url": "https://detail.damai.cn/item.htm?id=599834886497", # 目标购票网址
@@ -44,11 +45,17 @@ pip install selenium
 
 ![avatar](/picture/2.png)
 
+配置实名者时请查看购票须知中是否有相关要求，下面两张图分别表示没有、有实名需求的情况：
+
+![avatar](/picture/3.png)
+
+![avatar](/picture/4.png)
+
 若是首次登录，根据终端输出的提示，依次点击登录、扫码登录，代码将自动保存cookie文件（cookie.pkl）。
 
 使用前请将待抢票者的姓名、手机、地址设为默认，如存在多名实名者，请提前保存相关信息。
 
-配置完成后执行python Autoticket.py即可，由于有启动建议提前一段时间打开程序。
+配置完成后执行python Autoticket.py即可，由于有启动延迟，建议提前一段时间打开程序。
 
 ## Advance usage
 最后成功测试运行时间：2019-10-02。
@@ -57,7 +64,24 @@ pip install selenium
 
 建议自己先测试一遍，自行修改相应的绝对路径或用更好的定位方法替代。
 
-具体修改方案请参见Wiki。
+具体定位方案请参见Wiki。
+
+本代码可修改为防弹窗类异常的持续抢票，仅需修改代码末尾：解注释"while True"与"break"，注释"if True"即可。
+
+    # while True: # 可用于无限抢票，防止弹窗类异常使抢票终止
+    if True:
+        try:
+            con.enter_concert()
+            if con.type == 1:  # detail.damai.cn
+                con.choose_ticket_1()
+                con.check_order_1()
+            elif con.type == 2:  # piao.damai.cn
+                con.choose_ticket_2()
+                con.check_order_2()
+            con.finish()
+            # break
+        except Exception as e:
+            print(e)
 
 ## Change log
 v0.1: 
@@ -89,18 +113,18 @@ v0.4:
 v0.5:
 
 改默认浏览器为Chrome，默认取消图片加载，修复了部分bug，支持detail类别网站的票数增减、多实名者勾选，调整部分定位方式，修改错误输出
+
+v0.6:
+
+增加日期选择功能，完善实名售票，增强异常处理与第2类网址适配
   
 ## To-do List
-### 预计本次国庆期间划掉1~4
-1. 适配piao.damai.cn
 
-2. 增加日期选择功能
+1. 完善第2类网址（piao.damai.cn）实名购票功能
 
-3. 实名售票适配
+2. 鲁棒性增强
 
-4. 完善异常捕获
-
-5. 适配手机APP端（路漫漫~）
+3. 适配手机APP端（路漫漫~）
 
 ## Ref
 本代码修改自Ref 1，2两个Repo。
