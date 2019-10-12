@@ -319,7 +319,7 @@ class Concert(object):
                     list_xpath = "//*[@id=\"confirmOrder_1\"]/div[2]/div[2]/div[1]/div[%d]/label/span[1]/input"
                     for i in range(len(self.real_name)): # 选择第i个实名者
                         WebDriverWait(self.driver, self.total_wait_time, self.refresh_wait_time).until(
-                            EC.presence_of_element_located((By.XPATH, list_xpath%(self. real_name[i])))).click()
+                            EC.presence_of_element_located((By.XPATH, list_xpath%(self.real_name[i])))).click()
                 except Exception as e:
                     print(e)
             submitbtn = WebDriverWait(self.driver, self.total_wait_time, self.refresh_wait_time).until(
