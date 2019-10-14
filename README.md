@@ -129,7 +129,7 @@ v0.6:
 3. 适配手机APP端（路漫漫~）
 
 ## Ref
-本代码修改自Ref 1，2两个Repo。
+本代码修改自Ref 1，2两个Repo，参考了Ref 3。
 
 1. Oliver0047: https://github.com/Oliver0047/Concert_Ticket
 
