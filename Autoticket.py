@@ -106,7 +106,7 @@ class Concert(object):
             raise Exception("***错误：未知的浏览器类别***")
         self.driver.get(self.target_url)
         self.set_cookie()
-        self.driver.maximize_window()
+        # self.driver.maximize_window()
         self.driver.refresh()
         
         
@@ -124,7 +124,7 @@ class Concert(object):
         except Exception as e:
             print(e)
             self.status = 0
-            raise Exception("***错误：登录失败,尝试删除cookie后重试***")
+            raise Exception("***错误：登录失败,请检查配置文件昵称或删除cookie.pkl后重试***")
             self.driver.quit()
 
             
@@ -154,23 +154,26 @@ class Concert(object):
 
             session_list = session.find_elements_by_class_name('select_right_list_item')
             print('可选场次数量为：{}'.format(len(session_list)))
-            for i in self.session:  # 根据优先级选择一个可行场次
-                j = session_list[i - 1]
-                k = self.isClassPresent(j, 'presell', True)
-                if k:  # 如果找到了带presell的类
-                    if k.text == '无票':
-                        continue
-                    elif k.text == '预售':
+            if len(self.session) == 1:
+                j = session_list[self.session[0] - 1].click()
+            else:
+                for i in self.session:  # 根据优先级选择一个可行场次
+                    j = session_list[i - 1]
+                    k = self.isClassPresent(j, 'presell', True)
+                    if k:  # 如果找到了带presell的类
+                        if k.text == '无票':
+                            continue
+                        elif k.text == '预售':
+                            j.click()
+                            break
+                    else:
                         j.click()
                         break
-                else:
-                    j.click()
-                    break
 
             price_list = price.find_elements_by_class_name('select_right_list_item')
             print('可选票档数量为：{}'.format(len(price_list)))
             if len(self.price) == 1:
-                j = price_list[0].click()
+                j = price_list[self.price[0] - 1].click()
             else:
                 for i in self.price:
                     j = price_list[i - 1]
@@ -183,6 +186,17 @@ class Concert(object):
 
             buybutton = self.driver.find_element_by_class_name('buybtn')
             buybutton_text = buybutton.text
+            # print(buybutton_text)
+            
+            def add_ticket(): # 设置增加票数
+                try:
+                    for i in range(self.ticket_num - 1):  
+                        addbtn = WebDriverWait(self.driver, self.total_wait_time, self.refresh_wait_time).until(
+                            EC.presence_of_element_located(
+                                (By.XPATH, "/html/body/div[2]/div/div[1]/div[1]/div/div[2]/div[4]/div[6]/div[2]/div/div/a[2]")))
+                        addbtn.click()
+                except:
+                    raise Exception("***错误：票数增加失败***")
 
             if buybutton_text == "即将开抢" or buybutton_text == "即将开售":
                 self.status = 2
@@ -191,20 +205,12 @@ class Concert(object):
                 continue
 
             elif buybutton_text == "立即预订":
-                for i in range(self.ticket_num - 1):  # 设置增加票数
-                    addbtn = WebDriverWait(self.driver, self.total_wait_time, self.refresh_wait_time).until(
-                        EC.presence_of_element_located(
-                            (By.XPATH, "/html/body/div[2]/div/div[1]/div[1]/div/div[2]/div[5]/div[6]/div[2]/div/div/a[2]")))
-                    addbtn.click()
+                add_ticket()
                 buybutton.click()
                 self.status = 3
 
             elif buybutton_text == "立即购买":
-                for i in range(self.ticket_num - 1):  # 设置增加票数
-                    addbtn = WebDriverWait(self.driver, self.total_wait_time, self.refresh_wait_time).until(
-                        EC.presence_of_element_located(
-                            (By.XPATH, "/html/body/div[2]/div/div[1]/div[1]/div/div[2]/div[5]/div[6]/div[2]/div/div/a[2]")))
-                    addbtn.click()
+                add_ticket()
                 buybutton.click()
                 self.status = 4
 
@@ -313,18 +319,22 @@ class Concert(object):
     def check_order_1(self):
         if self.status in [3, 4]:
             print('###开始确认订单###')
+            button_xpath = " //*[@id=\"confirmOrder_1\"]/div[%d]/button" # 同意以上协议并提交订单Xpath
+            button_replace = 8 # 当实名者信息不空时为9，空时为8
             if self.real_name: # 实名者信息不为空
+                button_replace = 9
                 print('###选择购票人信息###')
                 try:
                     list_xpath = "//*[@id=\"confirmOrder_1\"]/div[2]/div[2]/div[1]/div[%d]/label/span[1]/input"
                     for i in range(len(self.real_name)): # 选择第i个实名者
                         WebDriverWait(self.driver, self.total_wait_time, self.refresh_wait_time).until(
-                            EC.presence_of_element_located((By.XPATH, list_xpath%(self.real_name[i])))).click()
+                            EC.presence_of_element_located((By.XPATH, list_xpath%(i+1)))).click()
                 except Exception as e:
                     print(e)
+                    raise Exception("***错误：实名信息框未显示，请检查网络或配置文件***")
             submitbtn = WebDriverWait(self.driver, self.total_wait_time, self.refresh_wait_time).until(
                     EC.presence_of_element_located(
-                        (By.XPATH, '/html/body/div[2]/div[2]/div/div[9]/button'))) # 同意以上协议并提交订单
+                        (By.XPATH, button_xpath%button_replace))) # 同意以上协议并提交订单
             submitbtn.click()  
             '''# 以下的方法更通用，但是更慢
             try:
@@ -404,17 +414,19 @@ if __name__ == '__main__':
                       config['damai_url'], config['target_url'], config['browser'])
     except Exception as e:
         print(e)
+        raise Exception("***错误：初始化失败，请检查配置文件***")
+    con.enter_concert()
     # while True: # 可用于无限抢票，防止弹窗类异常使抢票终止
     if True:
         try:
-            con.enter_concert()
             if con.type == 1:  # detail.damai.cn
                 con.choose_ticket_1()
                 con.check_order_1()
             elif con.type == 2:  # piao.damai.cn
                 con.choose_ticket_2()
                 con.check_order_2()
-            con.finish()
             # break
         except Exception as e:
             print(e)
+            con.driver.get(con.target_url)
+    con.finish()
