@@ -71,17 +71,17 @@ pip install selenium
     # while True: # 可用于无限抢票，防止弹窗类异常使抢票终止
     if True:
         try:
-            con.enter_concert()
             if con.type == 1:  # detail.damai.cn
                 con.choose_ticket_1()
                 con.check_order_1()
             elif con.type == 2:  # piao.damai.cn
                 con.choose_ticket_2()
                 con.check_order_2()
-            con.finish()
             # break
         except Exception as e:
             print(e)
+            con.driver.get(con.target_url)
+    con.finish()
 
 ## Change log
 v0.1: 
