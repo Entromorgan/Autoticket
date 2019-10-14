@@ -10,10 +10,10 @@ Option1：Firefox（测试版本：v68.0.1.7137） + geckodriver（测试版本�
 
 Option2：Chrome （测试版本：v77.0.3865.90） + Chrome driver （测试版本：v77.0.3865.10）
 
+注：Release中有测试版本的Windows driver，下载后请与.py文件放在同一文件夹下；代码本身支持Windows、Linux、MacOS，请移步Wiki更换浏览器驱动
+
 ## Set up
 pip install selenium
-
-注：支持Windows、Linux、MacOS，请移步Wiki更换浏览器驱动
 
 ## Basic usage
 在config.json中输入相应配置信息，具体说明如下：
