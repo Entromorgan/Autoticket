@@ -192,8 +192,7 @@ class Concert(object):
                 try:
                     for i in range(self.ticket_num - 1):  
                         addbtn = WebDriverWait(self.driver, self.total_wait_time, self.refresh_wait_time).until(
-                            EC.presence_of_element_located(
-                                (By.XPATH, "/html/body/div[2]/div/div[1]/div[1]/div/div[2]/div[4]/div[6]/div[2]/div/div/a[2]")))
+                            EC.presence_of_element_located((By.XPATH, "//div[@class='cafe-c-input-number']/a[2]")))
                         addbtn.click()
                 except:
                     raise Exception("***错误：票数增加失败***")
