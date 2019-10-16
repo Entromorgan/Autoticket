@@ -399,6 +399,7 @@ class Concert(object):
 
 
 if __name__ == '__main__':
+    # import datetime
     # startTime = datetime.datetime(2019, 9, 25, 9, 17, 7)  #定时功能：2019-9-25 09:17:07秒开抢
     # print('抢票程序还未开始...')
     # while datetime.datetime.now() < startTime:
