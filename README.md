@@ -4,7 +4,7 @@
 讨论QQ群：680269358
 
 ## Preliminary
-Python 3.6+
+Python 3.6 + pip
 
 Option1：Firefox（测试版本：v68.0.1.7137） + geckodriver（测试版本：v0.24.0）
 
@@ -15,7 +15,7 @@ Option2：Chrome （测试版本：v77.0.3865.90） + Chrome driver （测试版
 ## Step
 【重要，用前必看！！！】
 
-第一步：搭建python+pip环境，可使用anaconda、pycharm等集成环境，或纯python环境
+第一步：搭建python3+pip环境，可使用anaconda、pycharm等集成环境，或纯python环境
 
 第二步：依赖安装，pip install selenium
 
