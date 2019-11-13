@@ -10,7 +10,7 @@ Option1：Firefox（测试版本：v68.0.1.7137） + geckodriver（测试版本�
 
 Option2：Chrome （测试版本：v77.0.3865.90） + Chrome driver （测试版本：v77.0.3865.10）
 
-注：Release中有测试版本的Windows driver，下载后请与.py文件放在同一文件夹下；代码本身支持Windows、Linux、MacOS，请移步Wiki更换浏览器驱动
+注：Release中有测试版本的Windows driver，下载后请与.py文件放在同一文件夹下；代码本身支持Windows、Linux、MacOS，请移步[Wiki](https://github.com/Entromorgan/Autoticket/wiki/%E6%B5%8F%E8%A7%88%E5%99%A8%E9%A9%B1%E5%8A%A8)更换浏览器驱动
 
 ## Step
 【重要，用前必看！！！】
