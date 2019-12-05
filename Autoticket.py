@@ -36,8 +36,8 @@ class Concert(object):
             self.type = 2
         else:
             self.type = 0
-            raise Exception("***Error:Unsupported Target Url Format:{}***".format(self.target_url))
             self.driver.quit()
+            raise Exception("***Error:Unsupported Target Url Format:{}***".format(self.target_url))
 
             
     def isClassPresent(self, item, name, ret=False):
@@ -124,8 +124,8 @@ class Concert(object):
         except Exception as e:
             print(e)
             self.status = 0
-            raise Exception("***错误：登录失败,请检查配置文件昵称或删除cookie.pkl后重试***")
             self.driver.quit()
+            raise Exception("***错误：登录失败,请检查配置文件昵称或删除cookie.pkl后重试***")
 
             
     def choose_ticket_1(self):  # for type 1, i.e., detail.damai.cn
