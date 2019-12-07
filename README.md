@@ -19,7 +19,7 @@ Option2：Chrome （测试版本：v77.0.3865.90） + Chrome driver （测试版
 
 第二步：依赖安装，pip install selenium
 
-第三步：按Basic usage中的说明填写config.json配置文件，其中real_name项的填写务必提前到目标购票网址“购票须知”处确认是否需要实名者，以及是一证一票还是一人多票，若无需实名购票，则real_name留空；若一证一票，则real_name与ticket_num数字必须相同；若一人多票，则real_name仅留一个，ticket_num可多张
+第三步：按Basic usage中的说明填写config.json配置文件，其中real_name项的填写务必提前到目标购票网址“购票须知”处确认是否需要实名者，以及是一证一票还是一人多票，若无需实名购票，则real_name留空；若一证一票，则real_name的数量必须与ticket_num的数字相同；若一人多票，则real_name仅留一个，ticket_num可多张
 
 注：config.json文件中的配置信息均为必填项，有些可以留空，但请勿删除，若未按说明填写正确，极有可能导致抢票失败
 
