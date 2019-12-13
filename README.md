@@ -15,7 +15,7 @@ Option2：Chrome （测试版本：v77.0.3865.90） + Chrome driver （测试版
 ## Step
 【重要，用前必看！！！】
 
-第一步：搭建python3+pip环境，可使用anaconda、pycharm等集成环境，或纯python环境 （Windows下的环境搭建流程可参考 [Windows搭建python3开发环境&卸载] (https://www.jianshu.com/p/2f1acc6ff2c6))
+第一步：搭建python3+pip环境，可使用anaconda、pycharm等集成环境，或纯python环境 （Windows下的环境搭建流程可参考 [Windows搭建python3开发环境&卸载](https://www.jianshu.com/p/2f1acc6ff2c6))
 
 第二步：依赖安装，pip install selenium
 
