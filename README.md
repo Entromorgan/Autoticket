@@ -1,7 +1,11 @@
 # Autoticket
 大麦网自动抢票工具
 
-讨论QQ群：680269358
+讨论QQ群：
+
+1群：680269358（已满）
+
+2群：742585525
 
 ## Preliminary
 Python 3.6 + pip 
@@ -72,7 +76,7 @@ Option2：Chrome （测试版本：v77.0.3865.90） + Chrome driver （测试版
 
 建议自己先测试一遍，自行修改相应的绝对路径或用更好的定位方法替代。
 
-具体定位方案请参见Wiki。
+具体定位方案请参见[Wiki](https://github.com/Entromorgan/Autoticket/wiki/%E5%AE%9A%E4%BD%8D%E6%96%B9%E5%BC%8F)。
 
 本代码可修改为防弹窗类异常的持续抢票，仅需修改代码末尾：解注释"while True"与"break"，注释"if True"即可。
 
