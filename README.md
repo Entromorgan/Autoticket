@@ -7,6 +7,8 @@
 
 2群：742585525
 
+欢迎大家多提PR~
+
 ## Preliminary
 Python 3.6 + pip 
 
