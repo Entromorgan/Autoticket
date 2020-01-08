@@ -3,17 +3,17 @@ from json import loads
 from os.path import exists
 from pickle import dump, load
 from time import sleep, time
-import io
+# import io # 用于py2.7时解注释
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import sys
+# import sys # 用于py2.7时解注释
 
-reload(sys)
+# reload(sys) # 用于py2.7时解注释
 
-sys.setdefaultencoding('utf-8')
+# sys.setdefaultencoding('utf-8') # 用于py2.7时解注释
 
 
 class Concert(object):
@@ -413,7 +413,8 @@ if __name__ == '__main__':
     # print('开始进入抢票 %s' % startTime)
     # print('正在执行...')
     try:
-        with io.open('./config.json', 'r', encoding='utf-8') as f:
+        # with io.open('./config.json', 'r', encoding='utf-8') as f: # 用于py2.7时解注释
+        with open('./config.json', 'r', encoding='utf-8') as f: # 用于py2.7时注释此处
                     config = loads(f.read())
                 # params: 场次优先级，票价优先级，日期， 实名者序号, 用户昵称， 购买票数， 官网网址， 目标网址， 浏览器
         con = Concert(config['sess'], config['price'], config['date'], config['real_name'], config['nick_name'], config['ticket_num'],
