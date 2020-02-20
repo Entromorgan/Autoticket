@@ -18,14 +18,18 @@ Option2：Chrome （测试版本：v77.0.3865.90） + Chrome driver （测试版
 
 注：[Release](https://github.com/Entromorgan/Autoticket/releases)中有测试版本的Windows driver，下载后请与.py文件放在同一文件夹下；代码本身支持Windows、Linux、MacOS，请移步[Wiki](https://github.com/Entromorgan/Autoticket/wiki/%E6%B5%8F%E8%A7%88%E5%99%A8%E9%A9%B1%E5%8A%A8)更换浏览器驱动
 
+Mac上通过homebrew安装drivers:
+1. `brew cask install chromedriver`
+2. `brew install geckodriver`
+
 ## Step
 【重要，用前必看！！！】
 
 第一步：搭建python3+pip环境，可使用anaconda、pycharm等集成环境，或纯python环境 （Windows下的环境搭建流程可参考 [Windows搭建python3开发环境&卸载](https://www.jianshu.com/p/2f1acc6ff2c6))
 
-第二步：依赖安装，pip install selenium
+第二步：依赖安装，`pip install -r requirements.txt`
 
-第三步：按Basic usage中的说明填写config.json配置文件，其中real_name项的填写务必提前到目标购票网址“购票须知”处确认是否需要实名者，以及是一证一票还是一人多票，若无需实名购票，则real_name留空；若一证一票，则real_name的数量必须与ticket_num的数字相同；若一人多票，则real_name仅留一个，ticket_num可多张
+第三步：复制`config.example.json`文件并将新其命名为`config.json`。按Basic usage中的说明填写`config.json`配置文件，其中real_name项的填写务必提前到目标购票网址“购票须知”处确认是否需要实名者，以及是一证一票还是一人多票，若无需实名购票，则real_name留空；若一证一票，则real_name的数量必须与ticket_num的数字相同；若一人多票，则real_name仅留一个，ticket_num可多张
 
 注：config.json文件中的配置信息均为必填项，有些可以留空，但请勿删除，若未按说明填写正确，极有可能导致抢票失败
 
@@ -96,6 +100,9 @@ Option2：Chrome （测试版本：v77.0.3865.90） + Chrome driver （测试版
             print(e)
             con.driver.get(con.target_url)
     con.finish()
+
+## Potential Problems
+若遇到`selenium.common.exceptions.SessionNotCreatedException: Message: session not created: This version of ChromeDriver only supports Chrome version xx`这样的错误，说明当前Chrome的版本不够，需要升级成xx版本
 
 ## Change log
 v0.1: 
